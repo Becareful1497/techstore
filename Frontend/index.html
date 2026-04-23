@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechStore — Каталог</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&family=Bebas+Neue&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- CART DRAWER -->
+    <div class="cart-overlay-bg" id="cartOverlayBg" onclick="toggleCart()"></div>
+    <div class="cart-drawer" id="cartDrawer">
+        <div class="cart-drawer-header">
+            <div class="cart-drawer-title">
+                Корзина
+                <span class="cart-drawer-count" id="cartDrawerCount">0 товаров</span>
+            </div>
+            <button class="cart-drawer-close" onclick="toggleCart()">✕</button>
+        </div>
+        <div class="cart-controls">
+            <label class="cart-select-all">
+                <input type="checkbox" id="selectAll" onchange="toggleSelectAll(this)">
+                <div class="cart-cb-box"></div>
+                <span>Выбрать всё</span>
+            </label>
+            <button class="cart-delete-selected" onclick="deleteSelected()">Удалить выбранные</button>
+        </div>
+        <div class="cart-items-list" id="cartItemsList">
+            <!-- Items injected by JS -->
+        </div>
+
+
+        <div class="cart-drawer-footer" id="cartDrawerFooter">
+            <div class="cart-summary-box">
+                <div class="cart-summary-label">Итого</div>
+                <div class="cart-summary-row">
+                    <span id="cartSummaryCount">0 товаров</span>
+                    <span class="cart-summary-price" id="cartSummaryPrice">0 с.</span>
+                </div>
+                <button class="cart-checkout-btn" id="cartCheckoutBtn" onclick="openCheckout()">Перейти к оформлению</button>
+            </div>
+        </div>
+    </div>
+    <!-- NAV -->
+    <nav>
+        <a class="logo" href="#">
+            <div class="logo-icon">T</div><span class="logo-text">TECH<span>STORE</span></span>
+        </a>
+        <ul class="nav-links">
+            <li><a href="#" onclick="showPage('home')" id="nav-home" class="active">Главная</a></li>
+            <li><a href="#" onclick="showPage('catalog')" id="nav-catalog">Каталог</a></li>
+            <li><a href="#" onclick="showPage('catalog'); setCategory('Ноутбуки')">Ноутбуки</a></li>
+            <li><a href="#" onclick="showPage('catalog'); setCategory('Планшеты')">Планшеты</a></li>
+            <li><a href="#" onclick="showPage('catalog'); setCategory('Наушники')">Наушники</a></li>
+        </ul>
+        <div class="nav-right">
+            <div class="search-bar"><span style="color:var(--muted)">🔍</span><input type="text" id="searchInput"
+                    placeholder="Поиск товаров..."></div>
+            <div class="cart-btn" onclick="toggleCart()">🛒<span class="cart-badge" id="cartBadge">0</span></div>
+            <button class="ai-navbtn" onclick="openChat()">✦ AI Помощник</button>
+        </div>
+    </nav>
+
+    <!-- HOME PAGE -->
+    <div id="page-home" class="page active">
+
+        <!-- HERO -->
+        <section class="hero">
+            <div class="hero-bg"></div>
+            <div class="hero-grid-lines"></div>
+            <div class="hero-content">
+                <div class="hero-badge"><span class="hero-badge-dot"></span>Новинки 2026 уже в наличии</div>
+                <h1 class="hero-title">Технологии,<br>которые <span class="hl">работают</span><br>на тебя</h1>
+                <p class="hero-sub">Планшеты, ноутбуки, наушники и смартфоны от ведущих брендов. Умный AI-подбор за 2
+                    минуты.</p>
+                <div class="hero-actions">
+                    <button class="btn-primary" onclick="showPage('catalog')">🛍️ Перейти в каталог</button>
+                    <button class="btn-ghost" onclick="openChat()">✦ AI Подбор</button>
+                </div>
+                <div class="hero-stats">
+                    <div>
+                        <div class="hero-stat-num">142<span>+</span></div>
+                        <div class="hero-stat-lbl">товаров</div>
+                    </div>
+                    <div>
+                        <div class="hero-stat-num">4<span>.8</span></div>
+                        <div class="hero-stat-lbl">рейтинг</div>
+                    </div>
+                    <div>
+                        <div class="hero-stat-num">12<span>к+</span></div>
+                        <div class="hero-stat-lbl">покупателей</div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="hero-device">
+                    <div class="hero-glow"></div>
+                    <svg viewBox="0 0 320 320" width="320" height="320" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- iPad shape -->
+                        <rect x="70" y="20" width="180" height="280" rx="22" fill="#141414"
+                            stroke="rgba(200,255,0,0.15)" stroke-width="1.5" />
+                        <rect x="82" y="34" width="156" height="222" rx="10" fill="#0C0C0C" />
+                        <!-- screen glow -->
+                        <rect x="82" y="34" width="156" height="222" rx="10" fill="url(#heroScreenGrad)" />
+                        <!-- home bar -->
+                        <rect x="140" y="264" width="40" height="5" rx="2.5" fill="#2a2a2a" />
+                        <!-- screen content: app grid -->
+                        <rect x="96" y="50" width="36" height="36" rx="9" fill="#1e2030" />
+                        <rect x="140" y="50" width="36" height="36" rx="9" fill="#1a2e00" />
+                        <rect x="184" y="50" width="36" height="36" rx="9" fill="#1e1a30" />
+                        <rect x="96" y="94" width="36" height="36" rx="9" fill="#2e1a1a" />
+                        <rect x="140" y="94" width="36" height="36" rx="9" fill="#1a2830" />
+                        <rect x="184" y="94" width="36" height="36" rx="9" fill="#2a2a1a" />
+                        <!-- lime accent app -->
+                        <rect x="140" y="50" width="36" height="36" rx="9" fill="rgba(200,255,0,0.15)"
+                            stroke="rgba(200,255,0,0.3)" stroke-width="1" />
+                        <text x="158" y="73" text-anchor="middle" font-size="16" fill="#C8FF00">T</text>
+                        <!-- bottom bar card -->
+                        <rect x="90" y="148" width="140" height="80" rx="12" fill="#141414"
+                            stroke="rgba(255,255,255,0.06)" stroke-width="1" />
+                        <rect x="100" y="160" width="44" height="44" rx="10" fill="#1c1c1c" />
+                        <text x="122" y="188" text-anchor="middle" font-size="22">💻</text>
+                        <rect x="152" y="162" width="70" height="8" rx="4" fill="#2a2a2a" />
+                        <rect x="152" y="176" width="50" height="6" rx="3" fill="#1e1e1e" />
+                        <text x="152" y="210" font-size="11" fill="#C8FF00" font-family="sans-serif"
+                            font-weight="700">64 990 с.</text>
+                        <defs>
+                            <linearGradient id="heroScreenGrad" x1="82" y1="34" x2="238" y2="256"
+                                gradientUnits="userSpaceOnUse">
+                                <stop offset="0%" stop-color="#1a2e00" stop-opacity=".25" />
+                                <stop offset="100%" stop-color="#0C0C0C" stop-opacity="0" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+            </div>
+        </section>
+
+        <!-- TRUST -->
+        <div class="trust-strip">
+            <div class="trust-item">
+                <div class="trust-icon">🚀</div>
+                <div>
+                    <div class="trust-name">Быстрая доставка</div>
+                    <div class="trust-desc">1–2 дня по всей России</div>
+                </div>
+            </div>
+            <div class="trust-item">
+                <div class="trust-icon">🛡️</div>
+                <div>
+                    <div class="trust-name">Гарантия 2 года</div>
+                    <div class="trust-desc">Официальная гарантия</div>
+                </div>
+            </div>
+            <div class="trust-item">
+                <div class="trust-icon">↩️</div>
+                <div>
+                    <div class="trust-name">Возврат 30 дней</div>
+                    <div class="trust-desc">Без вопросов и споров</div>
+                </div>
+            </div>
+            <div class="trust-item">
+                <div class="trust-icon">💳</div>
+                <div>
+                    <div class="trust-name">Рассрочка 0%</div>
+                    <div class="trust-desc">До 24 месяцев</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CATEGORIES -->
+        <section class="home-section">
+            <div class="section-header">
+                <div>
+                    <div class="section-label">Разделы</div>
+                    <div class="section-title">Категории товаров</div>
+                </div>
+                <button class="see-all" onclick="showPage('catalog')">Смотреть все →</button>
+            </div>
+            <div class="cat-cards">
+                <div class="cat-card" onclick="showPage('catalog'); setCategory('Ноутбуки')">
+                    <span class="cat-card-icon">💻</span>
+                    <div class="cat-card-name">Ноутбуки</div>
+                    <div class="cat-card-count" id="cnt-laptops">— товаров</div>
+                    <div class="cat-card-arrow">↗</div>
+                </div>
+                <div class="cat-card" onclick="showPage('catalog'); setCategory('Планшеты')">
+                    <span class="cat-card-icon">📱</span>
+                    <div class="cat-card-name">Планшеты</div>
+                    <div class="cat-card-count" id="cnt-tablets">— товаров</div>
+                    <div class="cat-card-arrow">↗</div>
+                </div>
+                <div class="cat-card" onclick="showPage('catalog'); setCategory('Наушники')">
+                    <span class="cat-card-icon">🎧</span>
+                    <div class="cat-card-name">Наушники</div>
+                    <div class="cat-card-count" id="cnt-headphones">— товаров</div>
+                    <div class="cat-card-arrow">↗</div>
+                </div>
+                <div class="cat-card" onclick="showPage('catalog')">
+                    <span class="cat-card-icon">🖥️</span>
+                    <div class="cat-card-name">Мониторы</div>
+                    <div class="cat-card-count" id="cnt-monitors">— товаров</div>
+                    <div class="cat-card-arrow">↗</div>
+                </div>
+                <div class="cat-card" onclick="showPage('catalog')">
+                    <span class="cat-card-icon">🖱️</span>
+                    <div class="cat-card-name">Аксессуары</div>
+                    <div class="cat-card-count" id="cnt-accessories">— товаров</div>
+                    <div class="cat-card-arrow">↗</div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- BESTSELLERS -->
+        <section class="home-section">
+            <div class="section-header">
+                <div>
+                    <div class="section-label">Популярное</div>
+                    <div class="section-title">Хиты продаж</div>
+                </div>
+                <button class="see-all" onclick="showPage('catalog')">Все товары →</button>
+            </div>
+            <div class="product-grid" id="homeGrid">
+                <!-- injected by JS -->
+            </div>
+        </section>
+
+    </div>
+
+    <!-- CATALOG PAGE -->
+    <div id="page-catalog" class="page">
+        <div class="category-bar" id="categoryBar">
+            <div class="cat-tab active" onclick="setCategory(null, this)">Все <span class="cc"></span></div>
+            <div class="cat-tab" onclick="setCategory('Ноутбуки', this)">Ноутбуки <span class="cc"></span></div>
+            <div class="cat-tab" onclick="setCategory('Планшеты', this)">Планшеты <span class="cc"></span></div>
+            <div class="cat-tab" onclick="setCategory('Наушники', this)">Наушники <span class="cc"></span></div>
+            <div class="cat-tab" onclick="setCategory('Смартфоны', this)">Смартфоны <span class="cc"></span></div>
+        </div>
+
+        <!-- PAGE -->
+        <div class="page-layout">
+            <aside class="sidebar">
+                <div class="sidebar-header">
+                    <h2 class="sidebar-title">Фильтры</h2><a href="#" class="reset-link"
+                        onclick="resetFilters()">Сбросить</a>
+                </div>
+                <div class="sidebar-section">
+                    <p class="filter-label">Цена, с.</p>
+                    <div class="price-display"><span class="pv">0</span><span class="pv hi" id="priceVal">300 000</span>
+                    </div>
+                    <div class="range-track">
+                        <div class="range-fill" id="rangeFill"></div>
+                    </div>
+                    <input type="range" id="priceFilter" min="0" max="300000" value="300000"
+                        oninput="updatePrice(this.value); applyFilters();">
+                </div>
+                <div class="divider"></div>
+                <div class="sidebar-section" id="brandFilters">
+                    <p class="filter-label">Бренд</p>
+                    <!-- Brands injected here by JS -->
+                </div>
+            </aside>
+
+            <main class="main-content">
+                <div class="results-header">
+                    <p class="results-count" id="resultsCount">Найдено: <strong>0 товаров</strong></p>
+                    <div class="results-right">
+                        <select class="sort-select" id="sortSelect" onchange="applyFilters()">
+                            <option value="default">По умолчанию</option>
+                            <option value="price-asc">По цене ↑</option>
+                            <option value="price-desc">По цене ↓</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="product-grid" id="productGrid">
+                    <!-- Products injected here by JS -->
+                </div>
+            </main>
+        </div>
+
+    </div><!-- end page-catalog -->
+
+    <!-- AI FLOAT -->
+<!-- ══ CHECKOUT PAGE ══ -->
+<div id="page-checkout" class="page">
+  <div class="co-topbar">
+    <button class="co-back-btn" onclick="showPage('catalog')">← Назад в каталог</button>
+    <div class="co-topbar-title">Оформление заказа</div>
+    <div style="width: 120px"></div>
+  </div>
+  <div class="checkout-wrap">
+    <!-- LEFT COLUMN -->
+    <div class="checkout-left">
+
+      <!-- STEP 1: Товары -->
+      <div class="co-step" id="coStep1">
+        <div class="co-step-header">
+          <div class="co-step-num active" id="coNum1">1</div>
+          <div class="co-step-title" id="coTitle1">Товары в корзине</div>
+        </div>
+        <div class="co-step-body" id="coStep1Body">
+          <div id="coItemsList"></div>
+          <button class="co-confirm-btn" onclick="coStep(2)">Подтвердить</button>
+        </div>
+      </div>
+
+      <!-- STEP 2: Контакты -->
+      <div class="co-step" id="coStep2">
+        <div class="co-step-header">
+          <div class="co-step-num" id="coNum2">2</div>
+          <div class="co-step-title muted" id="coTitle2">Контактные данные</div>
+        </div>
+        <div class="co-step-body" id="coStep2Body" style="display:none">
+          <div class="co-form-grid">
+            <div class="co-field"><label>Имя *</label><input type="text" id="coName" placeholder="Ваше имя"></div>
+            <div class="co-field"><label>Фамилия</label><input type="text" id="coLastname" placeholder="Фамилия"></div>
+            <div class="co-field"><label>Телефон *</label><input type="tel" id="coPhone" placeholder="+7 (___) ___-__-__"></div>
+            <div class="co-field"><label>Email</label><input type="email" id="coEmail" placeholder="email@example.com"></div>
+          </div>
+          <button class="co-confirm-btn" onclick="coStep(3)">Подтвердить</button>
+        </div>
+      </div>
+
+      <!-- STEP 3: Доставка -->
+      <div class="co-step" id="coStep3">
+        <div class="co-step-header">
+          <div class="co-step-num" id="coNum3">3</div>
+          <div class="co-step-title muted" id="coTitle3">Способ получения</div>
+        </div>
+        <div class="co-step-body" id="coStep3Body" style="display:none">
+          <div class="co-radio-group">
+            <label class="co-radio-card">
+              <input type="radio" name="delivery" value="pickup" checked>
+              <div class="co-radio-box">
+                <div class="co-radio-icon">🏪</div>
+                <div>
+                  <div class="co-radio-title">Самовывоз</div>
+                  <div class="co-radio-sub">Бесплатно · Готово за 1-2 дня</div>
+                </div>
+              </div>
+            </label>
+            <label class="co-radio-card">
+              <input type="radio" name="delivery" value="courier">
+              <div class="co-radio-box">
+                <div class="co-radio-icon">🚚</div>
+                <div>
+                  <div class="co-radio-title">Курьерская доставка</div>
+                  <div class="co-radio-sub">от 500 с. · 1-3 рабочих дня</div>
+                </div>
+              </div>
+            </label>
+          </div>
+          <div class="co-field" style="margin-top:16px" id="coAddressField">
+            <label>Адрес доставки</label>
+            <input type="text" id="coAddress" placeholder="Улица, дом, квартира">
+          </div>
+          <button class="co-confirm-btn" onclick="coStep(4)">Подтвердить</button>
+        </div>
+      </div>
+
+      <!-- STEP 4: Оплата -->
+      <div class="co-step" id="coStep4">
+        <div class="co-step-header">
+          <div class="co-step-num" id="coNum4">4</div>
+          <div class="co-step-title muted" id="coTitle4">Способ оплаты</div>
+        </div>
+        <div class="co-step-body" id="coStep4Body" style="display:none">
+          <div class="co-radio-group">
+            <label class="co-radio-card">
+              <input type="radio" name="payment" value="card" checked>
+              <div class="co-radio-box">
+                <div class="co-radio-icon">💳</div>
+                <div>
+                  <div class="co-radio-title">Банковская карта</div>
+                  <div class="co-radio-sub">Visa, Mastercard, МИР</div>
+                </div>
+              </div>
+            </label>
+            <label class="co-radio-card">
+              <input type="radio" name="payment" value="cash">
+              <div class="co-radio-box">
+                <div class="co-radio-icon">💵</div>
+                <div>
+                  <div class="co-radio-title">Наличными при получении</div>
+                  <div class="co-radio-sub">Только для самовывоза и курьера</div>
+                </div>
+              </div>
+            </label>
+            <label class="co-radio-card">
+              <input type="radio" name="payment" value="installment">
+              <div class="co-radio-box">
+                <div class="co-radio-icon">📅</div>
+                <div>
+                  <div class="co-radio-title">Рассрочка 0%</div>
+                  <div class="co-radio-sub">До 24 месяцев без переплат</div>
+                </div>
+              </div>
+            </label>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT SIDEBAR -->
+    <aside class="checkout-sidebar">
+      <div class="co-summary">
+        <div class="co-sum-row"><span>Товары:</span><span id="coSumQty">0 шт.</span></div>
+        <div class="co-sum-row"><span>Частное лицо:</span><span id="coSumName">—</span></div>
+        <div class="co-sum-row"><span>Способ получения:</span><span id="coSumDelivery">Самовывоз</span></div>
+        <div class="co-sum-row"><span>Оплата:</span><span id="coSumPayment">Банк. карта</span></div>
+        <div class="co-divider"></div>
+        <div class="co-sum-title">Итого</div>
+        <div class="co-sum-total-row"><span>Сумма</span><span id="coSumSubtotal">0 с.</span></div>
+        <div class="co-sum-total-row final"><span>К оплате</span><span id="coSumTotal">0 с.</span></div>
+        <textarea class="co-comment" placeholder="Комментарий к заказу" rows="3"></textarea>
+        <label class="co-agree">
+          <input type="checkbox" id="coAgree">
+          <div class="co-agree-box"></div>
+          <span>Согласен (-на) с условиями <a href="#">Публичной оферты</a></span>
+        </label>
+        <button class="co-place-btn" id="coPlaceBtn" onclick="placeOrder()">Заказ подтверждаю</button>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<!-- AI FLOAT -->
+<button class="ai-float" onclick="openChat()">
+    <svg width="16" height="16" viewBox="0 0 22 22" fill="none">
+        <path d="M11 2L13.5 8.5L20 11L13.5 13.5L11 20L8.5 13.5L2 11L8.5 8.5L11 2Z" fill="#000" stroke="#000" stroke-width="0.5" stroke-linejoin="round"/>
+    </svg>
+    AI Помощник
+</button>
+
+
+    <!-- CHAT OVERLAY -->
+    <div class="chat-overlay" id="chatOverlay" onclick="overlayClick(event)">
+        <div class="chat-panel" id="chatPanel">
+            <div class="cp-header">
+                <div class="cp-avatar">✦</div>
+                <div class="cp-info">
+                    <div class="cp-name">TechStore AI</div>
+                    <div class="cp-status"><span class="cp-dot"></span>Онлайн — готов помочь</div>
+                </div>
+                <div class="cp-close" onclick="closeChat()">✕</div>
+            </div>
+            <div class="cp-progress">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="progress-meta"><span id="progressLabel">Начало подбора</span><span class="pct"
+                        id="progressPct">0%</span></div>
+            </div>
+            <div class="cp-body" id="chatBody"></div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>

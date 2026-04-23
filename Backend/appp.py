@@ -27,8 +27,9 @@ def get_db():
 # ──────────────────────────────────────────
 def init_db():
     conn = get_db()
+    conn.execute("DROP TABLE IF EXISTS products")
     conn.execute("""
-        CREATE TABLE IF NOT EXISTS products (
+        CREATE TABLE products (
             id        INTEGER PRIMARY KEY AUTOINCREMENT,
             name      TEXT    NOT NULL,
             category  TEXT,
@@ -38,31 +39,70 @@ def init_db():
             image     TEXT
         )
     """)
-    if conn.execute("SELECT COUNT(*) FROM products").fetchone()[0] == 0:
-        conn.executemany("""
-            INSERT INTO products (name, category, brand, price, old_price, image)
-            VALUES (?, ?, ?, ?, ?, ?)
-        """, [
-            ("MacBook Pro 14",     "Ноутбуки",   "Apple",   150000, 170000, ""),
-            ("MacBook Air M2",     "Ноутбуки",   "Apple",   110000, 125000, ""),
-            ("Lenovo ThinkPad X1", "Ноутбуки",   "Lenovo",   95000, 110000, ""),
-            ("Samsung Galaxy Tab", "Планшеты",   "Samsung",  45000,  55000, ""),
-            ("iPad Pro 12.9",      "Планшеты",   "Apple",   120000, 135000, ""),
-            ("Sony WH-1000XM5",    "Наушники",   "Sony",     28000,  35000, ""),
-            ("AirPods Pro 2",      "Наушники",   "Apple",    24000,  28000, ""),
-            ("Samsung Monitor 27", "Мониторы",   "Samsung",  32000,  38000, ""),
-            ("Logitech MX Master", "Аксессуары", "Lenovo",    8000,  10000, ""),
-            ("Bose QC45",          "Наушники",   "Bose",     22000,  27000, ""),
-        ])
-        conn.commit()
-        print("Товары добавлены в базу данных")
+    conn.executemany("""
+        INSERT INTO products (name, category, brand, price, old_price, image)
+        VALUES (?, ?, ?, ?, ?, ?)
+    """, [
+        # Ноутбуки
+        ("MacBook Pro 14", "Ноутбуки", "Apple", 185000, 200000, ""),
+        ("MacBook Air M2", "Ноутбуки", "Apple", 115000, 130000, ""),
+        ("Lenovo ThinkPad X1", "Ноутбуки", "Lenovo", 145000, 160000, ""),
+        ("ASUS ROG Zephyrus G14", "Ноутбуки", "ASUS", 155000, 175000, ""),
+        ("Dell XPS 15", "Ноутбуки", "Dell", 165000, 180000, ""),
+        ("HP Spectre x360", "Ноутбуки", "HP", 135000, 150000, ""),
+        ("Acer Swift 3", "Ноутбуки", "Acer", 75000, 85000, ""),
+        ("Microsoft Surface Laptop 5", "Ноутбуки", "Microsoft", 125000, 140000, ""),
+
+        # Планшеты
+        ("iPad Pro 12.9", "Планшеты", "Apple", 125000, 140000, ""),
+        ("iPad Air 5", "Планшеты", "Apple", 65000, 75000, ""),
+        ("Samsung Galaxy Tab S9 Ultra", "Планшеты", "Samsung", 135000, 150000, ""),
+        ("Samsung Galaxy Tab S8", "Планшеты", "Samsung", 75000, 85000, ""),
+        ("Xiaomi Pad 6", "Планшеты", "Xiaomi", 35000, 45000, ""),
+        ("Lenovo Tab P12 Pro", "Планшеты", "Lenovo", 55000, 65000, ""),
+
+        # Наушники
+        ("Sony WH-1000XM5", "Наушники", "Sony", 35000, 42000, ""),
+        ("AirPods Pro 2", "Наушники", "Apple", 26000, 30000, ""),
+        ("Bose QuietComfort 45", "Наушники", "Bose", 28000, 35000, ""),
+        ("Sennheiser Momentum 4", "Наушники", "Sennheiser", 32000, 38000, ""),
+        ("Samsung Galaxy Buds 2 Pro", "Наушники", "Samsung", 18000, 22000, ""),
+        ("JBL Tour One M2", "Наушники", "JBL", 24000, 29000, ""),
+
+        # Мониторы
+        ("Samsung Odyssey G7", "Мониторы", "Samsung", 65000, 75000, ""),
+        ("LG UltraGear 27GN950", "Мониторы", "LG", 75000, 85000, ""),
+        ("Dell UltraSharp U2723QE", "Мониторы", "Dell", 68000, 78000, ""),
+        ("ASUS ProArt Display", "Мониторы", "ASUS", 55000, 65000, ""),
+        ("BenQ PD2700U", "Мониторы", "BenQ", 45000, 55000, ""),
+
+        # Смартфоны
+        ("iPhone 15 Pro", "Смартфоны", "Apple", 115000, 130000, ""),
+        ("Samsung Galaxy S24 Ultra", "Смартфоны", "Samsung", 125000, 140000, ""),
+        ("Google Pixel 8 Pro", "Смартфоны", "Google", 95000, 110000, ""),
+        ("Xiaomi 14 Pro", "Смартфоны", "Xiaomi", 85000, 95000, ""),
+        ("OnePlus 12", "Смартфоны", "OnePlus", 80000, 90000, ""),
+
+        # Аксессуары
+        ("Logitech MX Master 3S", "Аксессуары", "Logitech", 12000, 15000, ""),
+        ("Apple Magic Keyboard", "Аксессуары", "Apple", 16000, 19000, ""),
+        ("Razer DeathAdder V3 Pro", "Аксессуары", "Razer", 14000, 17000, ""),
+        ("Keychron K2 Wireless", "Аксессуары", "Keychron", 11000, 14000, ""),
+        ("Anker 737 Power Bank", "Аксессуары", "Anker", 13000, 16000, ""),
+    ])
+    conn.commit()
+    print("База данных обновлена расширенным списком товаров")
     conn.close()
 
 init_db()
 
 @app.route("/")
 def home():
-    return send_from_directory(FRONTEND_DIR, "01techstorerabochay_fixed.html")
+    return send_from_directory(FRONTEND_DIR, "index.html")
+
+@app.route("/<path:filename>")
+def serve_static(filename):
+    return send_from_directory(FRONTEND_DIR, filename)
 
 @app.route("/api/products")
 def get_products():
